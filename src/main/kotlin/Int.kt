@@ -1,18 +1,37 @@
+import kotlin.math.abs
+
 class Solution4 {
-    fun solution(l: Int, r: Int): IntArray {
-        val answer = mutableListOf<Int>()
-        val regex = Regex("^[50]+$")
-        for(i in l..r) {
-            if(regex.matches(i.toString())){
-                answer.add(i)
+    fun solution(a: Int, b: Int, c: Int, d: Int): Int {
+        val result = listOf(a, b, c, d).groupBy { it }
+        return when (result.size) {
+            1 -> 1111 * a
+            2 -> {
+                val sortedList = result.values.sortedBy { it.count() }
+                if (sortedList.first().size == 1) {
+                    val q = sortedList.first()[0]
+                    val p = sortedList.last()[0]
+                    (10 * p + q) * (10 * p + q)
+                } else {
+                    val q = sortedList.first()[0]
+                    val p = sortedList.last()[0]
+                    (p + q) * abs(p - q)
+                }
             }
+
+            3 -> {
+                val filteredList = result.values.filter { it.size == 1 }
+                filteredList[0][0] * filteredList[1][0]
+            }
+
+            else -> result.values.minByOrNull { it.first() }!![0]
         }
-        return if(answer.isEmpty()) intArrayOf(-1) else answer.toIntArray()
     }
 }
 
 fun main() {
-    println(Solution4().solution(5, 555).toList())
-    println(Solution4().solution(10, 20).toList())
-    println(Solution4().solution(1, 1000000).toList())
+    println(Solution4().solution(2, 2, 2, 2))
+    println(Solution4().solution(4, 1, 4, 4))
+    println(Solution4().solution(6, 3, 3, 6))
+    println(Solution4().solution(2, 5, 2, 6))
+    println(Solution4().solution(6, 4, 2, 5))
 }
