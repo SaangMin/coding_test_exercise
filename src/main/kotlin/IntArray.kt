@@ -1,22 +1,35 @@
 class Solution {
-    fun solution(arr: IntArray, query: IntArray): IntArray {
-        var answer = arr.toList()
-        query.indices.forEach { i ->
-            if (i % 2 == 0) {
-                answer = answer.filterIndexed { index, _ -> index <= query[i] }
-            } else {
-                answer = answer.filterIndexed { index, _ -> index >= query[i] }
-            }
+    private var answer = 0
+    fun solution(numbers: IntArray, target: Int): Int {
+        dfs(0,0,numbers, target)
+        return answer
+    }
+
+    private fun dfs(sum: Int, idx: Int, numbers: IntArray, target: Int) {
+        if (idx == numbers.size && sum == target) {
+            answer++
+            return
         }
-        return answer.toIntArray()
+        if (idx >= numbers.size) {
+            return
+        }
+
+        dfs(sum + numbers[idx], idx+1, numbers, target)
+        dfs(sum - numbers[idx], idx+1, numbers, target)
     }
 }
 
 fun main() {
     println(
         Solution().solution(
-            intArrayOf(0, 1, 2, 3, 4, 5),
-            intArrayOf(4, 1, 2),
-        ).toList()
+            intArrayOf(1, 1, 1, 1, 1),
+            3,
+        )
+    )
+    println(
+        Solution().solution(
+            intArrayOf(4, 1, 2, 1),
+            4,
+        )
     )
 }
