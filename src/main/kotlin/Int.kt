@@ -1,42 +1,27 @@
 class Solution4 {
+    private var ansList: MutableList<IntArray>? = null
     fun solution(n: Int): Array<IntArray> {
-        val answer: Array<IntArray> = Array(n) { _ -> IntArray(n) }
-        val lastInt = n * n
-        var minInt = 0
-        var maxInt = n - 1
-        var int = 1
-        var x = 0
-        var y = 0
-        while (int <= lastInt) {
-            if (x == minInt && y < maxInt) {
-                answer[x][y] = int
-                y++
-                int++
-            } else if (y == maxInt && x <= maxInt) {
-                answer[x][y] = int
-                x++
-                int++
-            } else if (x == maxInt + 1 && y !=minInt) {
-                answer[x][y] = int
-                y--
-                int++
-            } else if(x <= maxInt + 1 && y == minInt) {
-                answer[x][y] = int
-                x--
-                int++
-            }
-            if(x == maxInt && y == maxInt) {
-                maxInt --
-            }
-            if(x == minInt + 1 && y == minInt) {
-                minInt ++
-            }
+        ansList = mutableListOf()
+        dfs(n, 1, 3, 2)
+        val answer = ansList!!.toTypedArray()
+        for (i in ansList!!.indices) {
+            answer[i] = ansList!![i]
         }
         return answer
+    }
+
+    private fun dfs(n: Int, start: Int, to: Int, mid: Int) {
+        if (n == 1) {
+            ansList?.add(intArrayOf(start, to))
+            return
+        }
+        dfs(n - 1, start, mid, to)
+        ansList?.add(intArrayOf(start, to))
+        dfs(n - 1, mid, to, start)
     }
 }
 
 fun main() {
-    println(Solution4().solution(4).toList())
-    println(Solution4().solution(5).toList())
+    println(Solution4().solution(2).toList())
+    println(Solution4().solution(3).toList())
 }
