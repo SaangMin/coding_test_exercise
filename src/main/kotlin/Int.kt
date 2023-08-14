@@ -1,37 +1,42 @@
-import kotlin.math.abs
-
 class Solution4 {
-    fun solution(a: Int, b: Int, c: Int, d: Int): Int {
-        val result = listOf(a, b, c, d).groupBy { it }
-        return when (result.size) {
-            1 -> 1111 * a
-            2 -> {
-                val sortedList = result.values.sortedBy { it.count() }
-                if (sortedList.first().size == 1) {
-                    val q = sortedList.first()[0]
-                    val p = sortedList.last()[0]
-                    (10 * p + q) * (10 * p + q)
-                } else {
-                    val q = sortedList.first()[0]
-                    val p = sortedList.last()[0]
-                    (p + q) * abs(p - q)
-                }
+    fun solution(n: Int): Array<IntArray> {
+        val answer: Array<IntArray> = Array(n) { _ -> IntArray(n) }
+        val lastInt = n * n
+        var minInt = 0
+        var maxInt = n - 1
+        var int = 1
+        var x = 0
+        var y = 0
+        while (int <= lastInt) {
+            if (x == minInt && y < maxInt) {
+                answer[x][y] = int
+                y++
+                int++
+            } else if (y == maxInt && x <= maxInt) {
+                answer[x][y] = int
+                x++
+                int++
+            } else if (x == maxInt + 1 && y !=minInt) {
+                answer[x][y] = int
+                y--
+                int++
+            } else if(x <= maxInt + 1 && y == minInt) {
+                answer[x][y] = int
+                x--
+                int++
             }
-
-            3 -> {
-                val filteredList = result.values.filter { it.size == 1 }
-                filteredList[0][0] * filteredList[1][0]
+            if(x == maxInt && y == maxInt) {
+                maxInt --
             }
-
-            else -> result.values.minByOrNull { it.first() }!![0]
+            if(x == minInt + 1 && y == minInt) {
+                minInt ++
+            }
         }
+        return answer
     }
 }
 
 fun main() {
-    println(Solution4().solution(2, 2, 2, 2))
-    println(Solution4().solution(4, 1, 4, 4))
-    println(Solution4().solution(6, 3, 3, 6))
-    println(Solution4().solution(2, 5, 2, 6))
-    println(Solution4().solution(6, 4, 2, 5))
+    println(Solution4().solution(4).toList())
+    println(Solution4().solution(5).toList())
 }
